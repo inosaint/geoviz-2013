@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+ <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+ <![endif]-->
+ <style type="text/css">
+ 	#map { height: 580px; float:left; margin-left: 20px; margin-bottom: 20px;}
+ 	#sidebar {float:left; width:200px; padding-left: 20px;}
+ 
+
+	 .info {
+	    padding: 6px 8px;
+	    font: 14px/16px Arial, Helvetica, sans-serif;
+	    background: white;
+	    background: rgba(255,255,255,0.8);
+	    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	    border-radius: 5px;
+	}
+	.info h4 {
+	    margin: 0 0 5px;
+	    color: #777;
+	}
+
+	.legend {
+	    line-height: 18px;
+	    color: #555;
+	}
+	.legend i {
+	    width: 18px;
+	    height: 18px;
+	    float: left;
+	    margin-right: 8px;
+	    opacity: 0.7;
+	}
+ </style>
+ <link rel="stylesheet" href="css/normalize.css" />
+ <link rel="stylesheet" href="css/foundation.css" />
+	<title>Geo visualization 2013: : Leaflet tutorial</title>
+	 <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+	 
+</head>
+<body>
+
+<nav class="top-bar">
+  <ul class="title-area">
+    <li class="name"><h1><a>Geo Viz 2013</a></h1></li>
+    
+  </ul>
+        <section class="top-bar-section">
+          <ul class="left">
+            <li><a href="index.html">Leaflet Demo</a></li>
+            <li><a href="choropleth.html">Choropleth</a></li>
+          </ul>
+
+        </section>
+</nav>
+<div id="wrapper">
+ <div id="map" class="large-9 columns"></div>
+ <script src="usathletes.geojson"></script>
+
+ <script type="text/javascript">
+
+
+
+
+/*
+{
+
+
+
+		CM_ATTR = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://cloudmade.com">CloudMade</a>';
+
+		CM_URL = 'http://{s}.tile.cloudmade.com/d4fc77ea4a63471cab2423e66626cbb6/{styleId}/256/{z}/{x}/{y}.png';
+
+		OSM_URL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		OSM_ATTRIB = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+	
+
+
+	var map = L.map('map').setView([37.8, -96], 4);
+
+	L.tileLayer(CM_URL, {attribution: CM_ATTR, styleId: 22677}).addTo(map);
+
+	// control that shows state info on hover
+	var InfoControl = L.Control.extend({
+
+		onAdd: function (map) {
+			this._div = L.DomUtil.create('div', 'info');
+			this.update();
+			return this._div;
+		},
+
+		update: function (props) {
+			this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
+				'<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+				: 'Hover over a state');
+		}
+	});
+
+	var info = new InfoControl();
+
+	info.addTo(map);
+
+
+	// get color depending on population density value
+	function getColor(d) {
+		return d > 1000 ? '#800026' :
+		       d > 500  ? '#BD0026' :
+		       d > 200  ? '#E31A1C' :
+		       d > 100  ? '#FC4E2A' :
+		       d > 50   ? '#FD8D3C' :
+		       d > 20   ? '#FEB24C' :
+		       d > 10   ? '#FED976' :
+		                  '#FFEDA0';
+	}
+
+	function style(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor(feature.properties.density)
+		};
+	}
+
+	function highlightFeature(e) {
+		var layer = e.target;
+
+		layer.setStyle({
+			weight: 5,
+			color: '#666',
+			dashArray: '',
+			fillOpacity: 0.7
+		});
+
+		if (!L.Browser.ie && !L.Browser.opera) {
+			layer.bringToFront();
+		}
+
+		info.update(layer.feature.properties);
+	}
+
+	var geojson;
+
+	function resetHighlight(e) {
+		geojson.resetStyle(e.target);
+		info.update();
+	}
+
+	function zoomToFeature(e) {
+		map.fitBounds(e.target.getBounds());
+	}
+
+	function onEachFeature(feature, layer) {
+		layer.on({
+			mouseover: highlightFeature,
+			mouseout: resetHighlight,
+			click: zoomToFeature
+		});
+	}
+
+	geojson = L.geoJson(statesData, {
+		style: style,
+		onEachFeature: onEachFeature
+	}).addTo(map);
+
+	map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
+
+
+	var legend = L.control({position: 'bottomright'});
+
+	legend.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+			labels = [],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor(from + 1) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '+'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+
+	legend.addTo(map);
+
+}
+*/
+ </script>
+<script type="text/javascript">
+
+	var geojson;
+
+	var map = L.map('map').setView([37.8, -96], 4);
+
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+	    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
+
+	function getColor(d) {
+    return d > 100 ? '#990000' :
+           d > 50  ? '#D7301F' :
+           d > 20  ? '#EF6548' :
+           d > 10  ? '#FC8D59' :
+           d > 5   ? '#FDBB84' :
+           d > 2   ? '#FDD49E' :
+           d > 0   ? '#FEF0D9':
+           						'#fff	';
+	}	
+
+	function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.Number),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+	}
+
+	function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    info.update(layer.feature.properties);
+
+    if (!L.Browser.ie && !L.Browser.opera) {
+        layer.bringToFront();
+    }
+	}
+
+	function resetHighlight(e) {
+		    info.update();
+    geojson.resetStyle(e.target);
+	}
+
+/*	geojson = L.geoJson(usathletes, {style: style}).addTo(map);*/
+
+
+	function zoomToFeature(e) {
+    map.fitBounds(e.target.getBounds());
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+}
+
+geojson = L.geoJson(usathletes, {
+    style: style,
+    onEachFeature: onEachFeature
+}).addTo(map);
+
+var info = L.control();
+
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+    this._div.innerHTML = '<h4>Olympics: US Athlete Statewise distribution</h4>' +  (props ?
+        '<b>' + props.NAME + '</b><br />' + props.Number + ' athletes'
+        : 'Hover over a state');
+};
+
+info.addTo(map);
+
+
+//legend
+
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 2, 5, 10, 20, 50, 100],
+        labels = [];
+		div.innerHTML +='<i style="background:' + "#FFF" + '"></i> '+
+            '0' + '<br>';
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+legend.addTo(map);
+
+</script>
+
+
+ <div class="large-2 columns">
+ 	<h2>Choropleth Map</h2>
+	 <p>Making use of the <a href="http://leafletjs.com/examples/choropleth.html">Leaflet Tutorial</a> with OSM.</p>
+	 <p>This was made as part of the geovisualization workshop 2013 at NID_b	</p>
+	 <br>
+	 <p>Documentation for the workshop can be found at <a href="http://mappingworlds.tumblr.com">MappingWorlds</a> </p>
+ </div>
+</div>
+</body>
+</html>
