@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+ <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+ <![endif]-->
+ <style type="text/css">
+ 	#map { height: 580px; width:800px; float:left; margin-left: 20px; margin-bottom: 20px;}
+ 	#sidebar {float:left; width:200px; padding-left: 20px;}
+ 
+ </style>
+ <link rel="stylesheet" href="css/normalize.css" />
+ <link rel="stylesheet" href="css/foundation.css" />
+	<title>Geo visualization 2013: : Polylines tutorial</title>
+	 <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+</head>
+<body>
+
+<nav class="top-bar">
+  <ul class="title-area">
+    <li class="name"><h1><a>Geo Viz 2013</a></h1></li>
+    
+  </ul>
+        <section class="top-bar-section">
+          <ul class="left">
+            <li><a href="index.html">Leaflet Demo</a></li>
+            <li><a href="choropleth.html">Choropleth</a></li>
+            <li><a href="polyline.html">Polylines</a></li>
+          </ul>
+
+        </section>
+</nav>
+<div id="wrapper">
+ <div id="map" class="large-9 columns"></div>
+<script>
+//example user location
+var mapCenter = new L.LatLng(35.6961, 51.4231);
+
+var map = L.map('map', 
+      {		
+      		center: mapCenter,
+        	zoom: 3,
+          worldCopyJump: true
+      });
+
+// add an OpenStreetMap tile layer
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+var point1 = new L.LatLng(12.8700, 74.8800); //mangalore
+var point2 = new L.LatLng(12.9667, 77.5667); //bangalore
+var point3 = new L.LatLng(26.1833, 91.7333); //guwahati
+var point4 = new L.LatLng(27.4800, 95.0000); //dibrugarh
+var point5 = new L.LatLng(26.1833, 91.7333); //guwahati
+var point6 = new L.LatLng(28.6100, 77.2300); //delhi
+var point7 = new L.LatLng(50.1117, 8.6858);  //frankfurt
+var point8 = new L.LatLng(49.4122, 8.7100); //heidelberg
+var point9 = new L.LatLng(48.3000, 8.1500); //black forest
+var point10 = new L.LatLng(47.7000, 8.6333); //schaffhausen
+var point11 = new L.LatLng(47.0500, 8.3000); //lucerne
+var point12 = new L.LatLng(46.8167, 8.4000); //engelberg
+var point13 = new L.LatLng(46.9500, 7.4500); //bern
+var point14 = new L.LatLng(46.2000, 6.1500); //geneva
+var point15 = new L.LatLng(48.8567, 2.3508); //paris
+var point16 = new L.LatLng(28.6100, 77.2300); //delhi
+var point17 = new L.LatLng(12.8700, 74.8800); //mangalore
+
+var pointList = [point1,point2,point3,point4,point5,point6,point7,point8,point9,point10,point11,point12,point13,point14,point15,point16,point17];
+/*
+for(i=1;i<17;i++){
+	pointList += "point"+i+", "
+};
+console.log(pointList);
+*/
+
+var firstpolyline = new L.polyline(pointList, {
+color: 'red',
+weight: 3,
+opacity: 1,
+smoothFactor: .5
+
+});
+
+
+
+firstpolyline.addTo(map);
+/*
+map.panTo(point3, {
+	animate:	true,
+	duration:	1,
+	easeLinearity: 0.25} );
+
+for(j=25000;j>=0;j--){
+
+if(j==1){
+
+	console.log(j);
+
+	map.panTo(point8, {
+	animate:	true,
+	duration:	.2,
+	easeLinearity: 0.25} );
+}
+
+};
+*/
+for(k=0;k<17;k++){
+L.marker(pointList[k]).addTo(map);
+};
+
+</script>
+
+<div class="large-4 columns">
+ 	<h2>Playing with Polylines</h2>
+ <p>An attempt at visualizing my upcoming family trip with the help of polylines in Leaflet. Circa November 2013.</p>
+ <br>
+ <p>I've been documenting my mapping work at <a href="http://mappingworlds.tumblr.com">MappingWorlds</a> </p>
+ </div>
+</div>
+</body>
+</html>
