@@ -12,8 +12,16 @@
  </style>
  <link rel="stylesheet" href="css/normalize.css" />
  <link rel="stylesheet" href="css/foundation.css" />
+ <link rel="stylesheet" href="css/leaflet.label.css" />
+ 
 	<title>Geo visualization 2013: : Polylines tutorial</title>
 	 <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+	 <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.2.3"></script>
+	 <script src="js/oms.min.js"></script>
+	 <script src="js/leaflet.label.js"></script>
+	 <script src="js/leaflet.polylineDecorator.js"></script>
+	 
+
 </head>
 <body>
 
@@ -43,11 +51,19 @@ var map = L.map('map',
         	zoom: 3,
           worldCopyJump: true
       });
+var stamen = new L.StamenTileLayer("watercolor");
+        
+map.addLayer(stamen);
 
 // add an OpenStreetMap tile layer
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+}).addTo(map).setOpacity(0.5);
+
+var oms = new OverlappingMarkerSpiderfier(map,{
+	keepSpiderfied: true,
+	legWeight: 2
+});
 
 var point1 = new L.LatLng(12.8700, 74.8800); //mangalore
 var point2 = new L.LatLng(12.9667, 77.5667); //bangalore
@@ -83,9 +99,9 @@ smoothFactor: .5
 
 });
 
-
-
 firstpolyline.addTo(map);
+//firstpolyline.bindLabel('Nothing to see here :P').addTo(map); //labels on polylines
+
 /*
 map.panTo(point3, {
 	animate:	true,
@@ -105,18 +121,74 @@ if(j==1){
 }
 
 };
+popup.setContent(marker.desc);
+  popup.setLatLng(marker.getLatLng());
+  map.openPopup(popup);
 */
-for(k=0;k<17;k++){
-L.marker(pointList[k]).addTo(map);
-};
+
+//hiding to add static labels
+
+/*for(k=0;k<17;k++){
+var marker = L.marker(pointList[k]);
+map.addLayer(marker); //adding markers to the map
+oms.addMarker(marker); //spiderifying markers
+};*/
+
+/*L.marker(point1).bindLabel('Mangalore', { noHide: true }).addTo(map).showLabel();
+L.marker(point2).bindLabel('Bangalore', { noHide: true }).addTo(map).showLabel();
+L.marker(point3).bindLabel('Guwahati', { noHide: true }).addTo(map).showLabel();
+L.marker(point4).bindLabel('Dibrugarh', { noHide: true }).addTo(map).showLabel();
+L.marker(point6).bindLabel('Delhi', { noHide: true }).addTo(map).showLabel();
+L.marker(point7).bindLabel('Frankfurt', { noHide: true }).addTo(map).showLabel();
+L.marker(point8).bindLabel('Heidelberg', { noHide: true }).addTo(map).showLabel();
+L.marker(point9).bindLabel('Black Forest', { noHide: true }).addTo(map).showLabel();
+L.marker(point10).bindLabel('Schauffhausen', { noHide: true }).addTo(map).showLabel();
+L.marker(point11).bindLabel('Lucerne', { noHide: true }).addTo(map).showLabel();
+L.marker(point12).bindLabel('Engelberg', { noHide: true }).addTo(map).showLabel();
+L.marker(point13).bindLabel('Bern', { noHide: true }).addTo(map).showLabel();
+L.marker(point14).bindLabel('Geneva', { noHide: true }).addTo(map).showLabel();
+L.marker(point15).bindLabel('Paris', { noHide: true }).addTo(map).showLabel();
+*/
+oms.addMarker(L.marker(point1).bindLabel('Mangalore').addTo(map));
+oms.addMarker(L.marker(point2).bindLabel('Bangalore').addTo(map));
+oms.addMarker(L.marker(point3).bindLabel('Guwahati').addTo(map));
+oms.addMarker(L.marker(point4).bindLabel('Dibrugarh').addTo(map));
+oms.addMarker(L.marker(point6).bindLabel('Delhi').addTo(map));
+oms.addMarker(L.marker(point7).bindLabel('Frankfurt').addTo(map));
+oms.addMarker(L.marker(point8).bindLabel('Heidelberg').addTo(map));
+oms.addMarker(L.marker(point9).bindLabel('Black Forest').addTo(map));
+oms.addMarker(L.marker(point10).bindLabel('Schauffhausen').addTo(map));
+oms.addMarker(L.marker(point11).bindLabel('Lucerne').addTo(map));
+oms.addMarker(L.marker(point12).bindLabel('Engelberg').addTo(map));
+oms.addMarker(L.marker(point13).bindLabel('Bern').addTo(map));
+oms.addMarker(L.marker(point14).bindLabel('Geneva').addTo(map));
+oms.addMarker(L.marker(point15).bindLabel('Paris').addTo(map));
+
+
+
+oms.addListener('click', function(marker) {
+
+ 	map.panTo(marker.getLatLng(), {
+	animate:	true,
+	duration:	0.25,
+	easeLinearity: 0.8} ).setZoom(5);
+  
+});
+
 
 </script>
 
 <div class="large-4 columns">
  	<h2>Playing with Polylines</h2>
  <p>An attempt at visualizing my upcoming family trip with the help of polylines in Leaflet. Circa November 2013.</p>
- <br>
+ 
  <p>I've been documenting my mapping work at <a href="http://mappingworlds.tumblr.com">MappingWorlds</a> </p>
+
+ <h6>Code Credits:</h6> 
+ <p><a href="http://twitter.com/geohacker">geohacker</a>'s <a href="https://github.com/geohacker/leaflet-opacity/blob/gh-pages/index.html">layering tutorial</a> </p>
+ Jawj's <a href="https://github.com/jawj/OverlappingMarkerSpiderfier-Leaflet">Overlapping Marker Spiderfier Plugin</a>
+ Jacobtoye's <a href="https://github.com/Leaflet/Leaflet.label">Leaflet Label Plugin</a>
+
  </div>
 </div>
 </body>
