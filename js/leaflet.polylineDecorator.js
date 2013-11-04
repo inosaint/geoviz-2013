@@ -193,7 +193,8 @@ L.RotatedMarker = L.Marker.extend({
 
 L.rotatedMarker = function (pos, options) {
     return new L.RotatedMarker(pos, options);
-};﻿/**
+};
+/*
 * Defines several classes of symbol factories,
 * to be used with L.PolylineDecorator
 */
@@ -204,6 +205,7 @@ L.Symbol = L.Symbol || {};
 * A simple dash symbol, drawn as a Polyline.
 * Can also be used for dots, if 'pixelSize' option is given the 0 value.
 */
+
 L.Symbol.Dash = L.Class.extend({
     isZoomDependant: true,
     

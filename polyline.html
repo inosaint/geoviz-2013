@@ -20,6 +20,7 @@
 	 <script src="js/oms.min.js"></script>
 	 <script src="js/leaflet.label.js"></script>
 	 <script src="js/leaflet.polylineDecorator.js"></script>
+	 <script type="text/javascript" src="js/L.Terminator.js"></script>
 	 
 
 </head>
@@ -90,16 +91,66 @@ for(i=1;i<17;i++){
 };
 console.log(pointList);
 */
+var polyline1 = L.polyline([point1,point2], {color: 'red',weight: 3,opacity: 1,smoothFactor: .5}).addTo(map);
 
-var firstpolyline = new L.polyline(pointList, {
-color: 'red',
-weight: 3,
-opacity: 1,
-smoothFactor: .5
+var arrowHead1 = L.polylineDecorator(polyline1,{ patterns: [
+            { offset: '50%', repeat: 0, symbol: new L.Symbol.Marker({rotate: true, markerOptions: {
+                    icon: L.icon({
+                        iconUrl: 'img/icon_plane.png',
+                        iconAnchor: [16, 16] 
+                    })}
+                  })}
+        ]}).addTo(map);
 
-});
 
-firstpolyline.addTo(map);
+var polyline2 = L.polyline([point2,point3], {color: 'red',weight: 3,opacity: 1,smoothFactor: .5}).addTo(map);
+
+var arrowHead2 = L.polylineDecorator(polyline2,{ patterns: [
+            { offset: '55%', repeat: '0%', symbol: new L.Symbol.Marker({rotate: true, markerOptions: {
+                    icon: L.icon({
+                        iconUrl: 'img/icon_plane.png',
+                        iconAnchor: [16, 16] 
+                    })}
+                  })}
+        ]}).addTo(map);
+
+
+var polyline5 = L.polyline([point5,point6], {color: 'red',weight: 3,opacity: 1,smoothFactor: .5}).addTo(map);
+
+var arrowHead5 = L.polylineDecorator(polyline5,{ patterns: [
+            { offset: '50%', repeat: '0%', symbol: new L.Symbol.Marker({rotate: true, markerOptions: {
+                    icon: L.icon({
+                        iconUrl: 'img/icon_plane.png',
+                        iconAnchor: [16, 16] 
+                    })}
+                  })}
+        ]}).addTo(map);
+
+var polyline6 = L.polyline([point6,point7], {color: 'red',weight: 3,opacity: 1,smoothFactor: .5}).addTo(map);
+
+var arrowHead6 = L.polylineDecorator(polyline6,{ patterns: [
+            { offset: '5%', repeat: '40%', symbol: new L.Symbol.Marker({rotate: true, markerOptions: {
+                    icon: L.icon({
+                        iconUrl: 'img/icon_plane.png',
+                        iconAnchor: [16, 16] 
+                    })}
+                  })}
+        ]}).addTo(map);
+
+
+var polyline15 = L.polyline([point15,point16], {color: 'red', weight: 3,opacity: 1,smoothFactor: .5}).addTo(map);
+
+var arrowHead15 = L.polylineDecorator(polyline15,{ patterns: [
+            { offset: '30%', repeat: '40%', symbol: new L.Symbol.Marker({rotate: true, markerOptions: {
+                    icon: L.icon({
+                        iconUrl: 'img/icon_plane.png',
+                        iconAnchor: [16, 16] 
+                    })}
+                  })}
+        ]}).addTo(map);
+
+var firstpolyline = L.polyline(pointList, {color: 'red', weight: 3,opacity: 1,smoothFactor: .5}).addTo(map);
+
 //firstpolyline.bindLabel('Nothing to see here :P').addTo(map); //labels on polylines
 
 /*
@@ -174,7 +225,7 @@ oms.addListener('click', function(marker) {
 	easeLinearity: 0.8} ).setZoom(5);
   
 });
-
+L.terminator().addTo(map);
 
 </script>
 
@@ -186,9 +237,10 @@ oms.addListener('click', function(marker) {
 
  <h6>Code Credits:</h6> 
  <p><a href="http://twitter.com/geohacker">geohacker</a>'s <a href="https://github.com/geohacker/leaflet-opacity/blob/gh-pages/index.html">layering tutorial</a> </p>
- Jawj's <a href="https://github.com/jawj/OverlappingMarkerSpiderfier-Leaflet">Overlapping Marker Spiderfier Plugin</a>
- Jacobtoye's <a href="https://github.com/Leaflet/Leaflet.label">Leaflet Label Plugin</a>
-
+ <p> jawj's <a href="https://github.com/jawj/OverlappingMarkerSpiderfier-Leaflet">Overlapping Marker Spiderfier Plugin</a> </p>
+ <p> jacobtoye's <a href="https://github.com/Leaflet/Leaflet.label">Leaflet Label Plugin</a> </p>
+ <p> bbecquet's <a href="https://github.com/bbecquet/Leaflet.PolylineDecorator">Leaflet Polyline Decorator Plugin</a> </p>
+ <p> joergdietrich's <a href="https://github.com/joergdietrich/Leaflet.Terminatorr">Map Day/Night Plugin</a> </p>
  </div>
 </div>
 </body>
