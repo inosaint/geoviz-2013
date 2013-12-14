@@ -60,172 +60,31 @@
 </nav>
 <div id="wrapper">
  <div id="map" class="large-9 columns"></div>
- <script src="usathletes.geojson"></script>
-
- <script type="text/javascript">
-
-
-
-
-/*
-{
-
-
-
-		CM_ATTR = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-				'Imagery © <a href="http://cloudmade.com">CloudMade</a>';
-
-		CM_URL = 'http://{s}.tile.cloudmade.com/d4fc77ea4a63471cab2423e66626cbb6/{styleId}/256/{z}/{x}/{y}.png';
-
-		OSM_URL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-		OSM_ATTRIB = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-	
-
-
-	var map = L.map('map').setView([37.8, -96], 4);
-
-	L.tileLayer(CM_URL, {attribution: CM_ATTR, styleId: 22677}).addTo(map);
-
-	// control that shows state info on hover
-	var InfoControl = L.Control.extend({
-
-		onAdd: function (map) {
-			this._div = L.DomUtil.create('div', 'info');
-			this.update();
-			return this._div;
-		},
-
-		update: function (props) {
-			this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
-				'<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-				: 'Hover over a state');
-		}
-	});
-
-	var info = new InfoControl();
-
-	info.addTo(map);
-
-
-	// get color depending on population density value
-	function getColor(d) {
-		return d > 1000 ? '#800026' :
-		       d > 500  ? '#BD0026' :
-		       d > 200  ? '#E31A1C' :
-		       d > 100  ? '#FC4E2A' :
-		       d > 50   ? '#FD8D3C' :
-		       d > 20   ? '#FEB24C' :
-		       d > 10   ? '#FED976' :
-		                  '#FFEDA0';
-	}
-
-	function style(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor(feature.properties.density)
-		};
-	}
-
-	function highlightFeature(e) {
-		var layer = e.target;
-
-		layer.setStyle({
-			weight: 5,
-			color: '#666',
-			dashArray: '',
-			fillOpacity: 0.7
-		});
-
-		if (!L.Browser.ie && !L.Browser.opera) {
-			layer.bringToFront();
-		}
-
-		info.update(layer.feature.properties);
-	}
-
-	var geojson;
-
-	function resetHighlight(e) {
-		geojson.resetStyle(e.target);
-		info.update();
-	}
-
-	function zoomToFeature(e) {
-		map.fitBounds(e.target.getBounds());
-	}
-
-	function onEachFeature(feature, layer) {
-		layer.on({
-			mouseover: highlightFeature,
-			mouseout: resetHighlight,
-			click: zoomToFeature
-		});
-	}
-
-	geojson = L.geoJson(statesData, {
-		style: style,
-		onEachFeature: onEachFeature
-	}).addTo(map);
-
-	map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
-
-
-	var legend = L.control({position: 'bottomright'});
-
-	legend.onAdd = function (map) {
-
-		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-			labels = [],
-			from, to;
-
-		for (var i = 0; i < grades.length; i++) {
-			from = grades[i];
-			to = grades[i + 1];
-
-			labels.push(
-				'<i style="background:' + getColor(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
-		}
-
-		div.innerHTML = labels.join('<br>');
-		return div;
-	};
-
-	legend.addTo(map);
-
-}
-*/
- </script>
+ <script src="india_statesN.geojson"></script>
 <script type="text/javascript">
 
 	var geojson;
 
-	var map = L.map('map').setView([37.8, -96], 4);
+	var map = L.map('map').setView([23.2500,77.525102], 4);
 
 	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 	    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 	}).addTo(map);
 
 	function getColor(d) {
-    return d > 100 ? '#990000' :
-           d > 50  ? '#D7301F' :
-           d > 20  ? '#EF6548' :
-           d > 10  ? '#FC8D59' :
-           d > 5   ? '#FDBB84' :
-           d > 2   ? '#FDD49E' :
+    return d > 3500 ? '#990000' :
+           d > 2000  ? '#D7301F' :
+           d > 1000  ? '#EF6548' :
+           d > 500  ? '#FC8D59' :
+           d > 100   ? '#FDBB84' :
+           d > 10   ? '#FDD49E' :
            d > 0   ? '#FEF0D9':
            						'#fff	';
 	}	
 
 	function style(feature) {
     return {
-        fillColor: getColor(feature.properties.Number),
+        fillColor: getColor(feature.properties.Numbers),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -271,7 +130,7 @@ function onEachFeature(feature, layer) {
     });
 }
 
-geojson = L.geoJson(usathletes, {
+geojson = L.geoJson(indianStates, {
     style: style,
     onEachFeature: onEachFeature
 }).addTo(map);
@@ -286,8 +145,8 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4>Olympics: US Athlete Statewise distribution</h4>' +  (props ?
-        '<b>' + props.NAME + '</b><br />' + props.Number + ' athletes'
+    this._div.innerHTML = '<h4>Reported Rape Cases in India (2011)</h4>' +  (props ?
+        '<b>' + props.NAME_1 + '</b><br />' + props.Numbers + ' cases'
         : 'Hover over a state');
 };
 
@@ -301,7 +160,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 2, 5, 10, 20, 50, 100],
+        grades = [0, 10, 100, 500, 1000, 2000, 3500],
         labels = [];
 		div.innerHTML +='<i style="background:' + "#FFF" + '"></i> '+
             '0' + '<br>';
@@ -321,9 +180,8 @@ legend.addTo(map);
 
 
  <div class="large-2 columns">
- 	<h2>Choropleth Map</h2>
-	 <p>Making use of the <a href="http://leafletjs.com/examples/choropleth.html">Leaflet Tutorial</a> with OSM.</p>
-	 <p>This was made as part of the geovisualization workshop 2013 at NID_b	</p>
+ 	<h2>Choropleth Map of reported Rape cases of 2011</h2>
+	 
 	 <br>
 	 <p>Documentation for the workshop can be found at <a href="http://mappingworlds.tumblr.com">MappingWorlds</a> </p>
  </div>
